@@ -16,6 +16,9 @@ EXCLUDE_DEPS="${EXCLUDE_DEPS:-}"
 ECOSYSTEMS="${ECOSYSTEMS:-}"
 RESULTS_DESTINATION="${RESULTS_DESTINATION:-pr-comment}"
 FAIL_ON_BREAKING="${FAIL_ON_BREAKING:-false}"
+INITIAL_WAIT="${INITIAL_WAIT:-600}"
+POLL_INTERVAL="${POLL_INTERVAL:-30}"
+SCAN_TIMEOUT="${SCAN_TIMEOUT:-3600}"
 GITHUB_EVENT_NAME="${GITHUB_EVENT_NAME:-}"
 GITHUB_REPO="${GITHUB_REPO:-}"
 MIGRATOWL_CHECK_DEPS="${MIGRATOWL_CHECK_DEPS:-[]}"
@@ -92,18 +95,23 @@ JOB_ID=$(echo "$WEBHOOK_RESPONSE" | jq -r '.job_id')
 log "Job ID: ${JOB_ID}"
 
 # ── Poll until terminal state ─────────────────────────────────────────────────
-log "Polling /jobs/${JOB_ID}"
+log "Polling /jobs/${JOB_ID} (initial wait: ${INITIAL_WAIT}s, interval: ${POLL_INTERVAL}s, timeout: ${SCAN_TIMEOUT}s)"
 FINAL_STATE=""
-for i in $(seq 1 90); do
+
+log "Waiting ${INITIAL_WAIT}s before first poll…"
+sleep "$INITIAL_WAIT"
+
+DEADLINE=$(($(date +%s) + SCAN_TIMEOUT))
+while [ "$(date +%s)" -lt "$DEADLINE" ]; do
   RESPONSE=$(curl -sf "http://127.0.0.1:8000/jobs/${JOB_ID}" || echo '{"state":"error"}')
   STATE=$(echo "$RESPONSE" | jq -r '.state')
-  log "[${i}/90] state: ${STATE}"
+  log "[$(date -u +%H:%M:%S)] state: ${STATE}"
   if [ "$STATE" = "completed" ] || [ "$STATE" = "failed" ]; then
     FINAL_STATE="$STATE"
     echo "$RESPONSE" > /tmp/migratowl-result.json
     break
   fi
-  sleep 10
+  sleep "$POLL_INTERVAL"
 done
 
 if [ -z "$FINAL_STATE" ]; then

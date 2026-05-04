@@ -62,6 +62,18 @@ inputs:
     description: 'Exit non-zero when is_breaking: true is found, making Migratowl a blocking check.'
     required: false
     default: 'false'
+  initial-wait:
+    description: 'Seconds to wait before the first poll (lets the sandbox spin up). Default: 600.'
+    required: false
+    default: '600'
+  poll-interval:
+    description: 'Seconds between job status polls. Default: 30.'
+    required: false
+    default: '30'
+  scan-timeout:
+    description: 'Total seconds before giving up on a scan. Default: 3600.'
+    required: false
+    default: '3600'
 
 runs:
   using: 'composite'
@@ -77,6 +89,8 @@ runs:
         CHECK_DEPS_OVERRIDE: ${{ inputs.check-deps }}
         GITHUB_REPO: ${{ github.repository }}
         GH_TOKEN: ${{ github.token }}
+        BASE_BRANCH: ${{ github.base_ref }}
+        HEAD_BRANCH: ${{ github.head_ref || github.ref_name }}
       run: ${{ github.action_path }}/scripts/extract-deps.sh
 
     # ── Step 2: Set up kind cluster with Calico CNI ──────────────────────────
@@ -116,7 +130,7 @@ runs:
       shell: bash
       env:
         REPO_URL: https://github.com/${{ github.repository }}
-        BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        BRANCH_NAME: ${{ env.MIGRATOWL_BRANCH }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
         COMMIT_SHA_PR: ${{ github.event.pull_request.head.sha }}
         COMMIT_SHA_PUSH: ${{ github.sha }}
@@ -127,6 +141,9 @@ runs:
         ECOSYSTEMS: ${{ inputs.ecosystems }}
         RESULTS_DESTINATION: ${{ inputs.results-destination }}
         FAIL_ON_BREAKING: ${{ inputs.fail-on-breaking }}
+        INITIAL_WAIT: ${{ inputs.initial-wait }}
+        POLL_INTERVAL: ${{ inputs.poll-interval }}
+        SCAN_TIMEOUT: ${{ inputs.scan-timeout }}
         GITHUB_EVENT_NAME: ${{ github.event_name }}
         GITHUB_REPO: ${{ github.repository }}
         GH_TOKEN: ${{ github.token }}

@@ -12,6 +12,8 @@ EVENT_NAME="${GITHUB_EVENT_NAME:-}"
 PR_NUMBER="${PR_NUMBER:-}"
 CHECK_DEPS_OVERRIDE="${CHECK_DEPS_OVERRIDE:-}"
 GITHUB_REPO="${GITHUB_REPO:-}"
+BASE_BRANCH="${BASE_BRANCH:-}"
+HEAD_BRANCH="${HEAD_BRANCH:-}"
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -124,8 +126,9 @@ PYEOF
 # Scheduled triggers always run a full scan; skip trigger evaluation entirely.
 if [ "$EVENT_NAME" = "schedule" ]; then
   log "Scheduled trigger — full scan"
-  echo "MIGRATOWL_SKIP=false"    >> "$GITHUB_ENV"
-  echo "MIGRATOWL_CHECK_DEPS=[]" >> "$GITHUB_ENV"
+  echo "MIGRATOWL_SKIP=false"             >> "$GITHUB_ENV"
+  echo "MIGRATOWL_CHECK_DEPS=[]"          >> "$GITHUB_ENV"
+  echo "MIGRATOWL_BRANCH=${HEAD_BRANCH}"  >> "$GITHUB_ENV"
   exit 0
 fi
 
@@ -163,6 +166,16 @@ case "$SCAN_TRIGGER" in
 esac
 
 echo "MIGRATOWL_SKIP=false" >> "$GITHUB_ENV"
+
+# Bot PRs: scan BASE branch — dep is already bumped on HEAD, scanning HEAD would
+# show it as "already at latest" and skip it. Scanning BASE lets migratowl upgrade
+# from the old version and detect test failures.
+# Human PRs: scan HEAD — test the actual submitted code against upgraded deps.
+if is_bot_pr; then
+  echo "MIGRATOWL_BRANCH=${BASE_BRANCH}" >> "$GITHUB_ENV"
+else
+  echo "MIGRATOWL_BRANCH=${HEAD_BRANCH}" >> "$GITHUB_ENV"
+fi
 
 # User-provided override takes precedence over auto-extraction.
 if [ -n "$CHECK_DEPS_OVERRIDE" ]; then
