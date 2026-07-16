@@ -69,7 +69,7 @@ jobs:
 |---|---|---|
 | `anthropic-api-key` | — | Required unless `openai-api-key` is set. |
 | `openai-api-key` | — | Alternative to Anthropic; sets `MIGRATOWL_MODEL_PROVIDER=openai`. |
-| `model` | `claude-sonnet-4-6` | Passed to `MIGRATOWL_MODEL_NAME`. |
+| `model` | `claude-sonnet-5` | Passed to `MIGRATOWL_MODEL_NAME`. |
 | `mode` | `normal` | `safe` \| `normal`. |
 | `ecosystems` | `""` | Comma-separated; empty = auto-detect all. |
 | `exclude-deps` | `""` | Comma-separated package names to skip. |

@@ -4,8 +4,8 @@
 
 set -euo pipefail
 
-KIND_VERSION="${KIND_VERSION:-v0.24.0}"
-CALICO_VERSION="${CALICO_VERSION:-v3.28.2}"
+KIND_VERSION="${KIND_VERSION:-v0.32.0}"
+CALICO_VERSION="${CALICO_VERSION:-v3.32.1}"
 ACTION_PATH="${ACTION_PATH:-}"
 
 log() { echo "[migratowl/start-kind] $*"; }

@@ -17,7 +17,7 @@ inputs:
   model:
     description: 'Model name passed to MIGRATOWL_MODEL_NAME.'
     required: false
-    default: 'claude-sonnet-4-6'
+    default: 'claude-sonnet-5'
   mode:
     description: 'Version resolution mode: safe | normal.'
     required: false
@@ -98,8 +98,8 @@ runs:
       if: env.MIGRATOWL_SKIP != 'true'
       shell: bash
       env:
-        KIND_VERSION: v0.24.0
-        CALICO_VERSION: v3.28.2
+        KIND_VERSION: v0.32.0
+        CALICO_VERSION: v3.32.1
         ACTION_PATH: ${{ github.action_path }}
       run: ${{ github.action_path }}/scripts/start-kind.sh
 
