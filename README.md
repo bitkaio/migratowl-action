@@ -100,7 +100,7 @@ Use only the permissions your workflow needs. For scheduled mode with `results-d
 ## How it works
 
 1. **Determine scan eligibility** — reads the PR author and changed files; skips the entire run when the `scan-trigger` policy is not met (before any expensive setup).
-2. **Create kind cluster** — spins up a single-node [kind](https://kind.sigs.k8s.io/) cluster with [Calico CNI](https://projectcalico.docs.tigera.io/) so `NetworkPolicy` is actually enforced.
+2. **Create kind cluster** — spins up a single-node [kind](https://kind.sigs.k8s.io/) cluster with [Calico CNI](https://projectcalico.docs.tigera.io/) so `NetworkPolicy` is actually enforced. Sandbox pods get no ingress and can reach only DNS and public HTTP(S) (git hosts, package registries).
 3. **Pull runtime image** — pulls `ghcr.io/bitkaio/migratowl-runtime:<version>` (prebuilt multi-arch image containing Python, Node.js, Go, Rust, and Java runtimes) and loads it into the cluster.
 4. **Start Migratowl server** — clones `bitkaio/migratowl` at the pinned version, installs via `uv sync`, starts `uvicorn` on `127.0.0.1:8000`.
 5. **Extract dependencies** — on Dependabot and Renovate PRs, auto-extracts bumped package names for a targeted scan (10–50× cheaper than a full scan). For Renovate grouped updates, parses the PR body table; falls back to a full scan if the table is absent.

@@ -84,4 +84,53 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 RBAC
 
+# ── Sandbox egress policy ─────────────────────────────────────────────────────
+# Migratowl attaches a deny-all NetworkPolicy to each sandbox pod, which Calico
+# enforces, so DNS, git clone and package installs would fail. Re-open DNS and
+# HTTP(S) to public addresses only. Keep in sync with
+# bitkaio/migratowl k8s/sandbox-egress-raw.yaml.
+log "Applying sandbox egress policy"
+kubectl apply -f - <<'EGRESS'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: migratowl-sandbox-egress
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: deepagents
+      app.kubernetes.io/component: sandbox
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.0.0/16
+              - 100.64.0.0/10
+              - 127.0.0.0/8
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+EGRESS
+
 log "Cluster ready"

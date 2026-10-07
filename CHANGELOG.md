@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Sandboxes had no network access** — Migratowl attaches a deny-all `NetworkPolicy` to each raw-mode
+  sandbox pod, and Calico enforces it, so DNS, `git clone` and package installs failed inside the scan.
+  `scripts/start-kind.sh` now applies an egress policy that re-opens DNS and HTTP/HTTPS to public
+  addresses only (same as `k8s/sandbox-egress-raw.yaml` in bitkaio/migratowl). Ingress, cluster CIDRs,
+  node networks and cloud metadata stay blocked.
+
 ## [1.2.0] - 2026-07-16
 
 ### Changed
