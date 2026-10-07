@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Default `model` is now `claude-sonnet-5-5`** (was `claude-sonnet-5`; same price). Matches the new
+  default in `bitkaio/migratowl`, which uses native structured output for Anthropic models — Claude Sonnet
+  5.5 rejects the forced tool call the previous approach relied on, so use a Migratowl server version that
+  includes this change. Set `model: claude-sonnet-5` to keep the previous model.
+
 ### Fixed
 
 - **Sandboxes had no network access** — Migratowl attaches a deny-all `NetworkPolicy` to each raw-mode

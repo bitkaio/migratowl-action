@@ -17,7 +17,7 @@ inputs:
   model:
     description: 'Model name passed to MIGRATOWL_MODEL_NAME.'
     required: false
-    default: 'claude-sonnet-5'
+    default: 'claude-sonnet-5-5'
   mode:
     description: 'Version resolution mode: safe | normal.'
     required: false
