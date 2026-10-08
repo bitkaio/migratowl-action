@@ -63,6 +63,17 @@ jobs:
           results-destination: issue   # auto-creates or updates issue labelled migratowl-report
 ```
 
+### Through an LLM proxy (LiteLLM, corporate gateway)
+
+```yaml
+      - uses: bitkaio/migratowl-action@v1
+        with:
+          model-provider: litellm                       # or anthropic / openai with a provider-compatible proxy
+          llm-base-url: https://llm-proxy.example.com/v1
+          openai-api-key: ${{ secrets.LLM_PROXY_KEY }}  # litellm uses the OpenAI-compatible API
+          model: anthropic--claude-sonnet-latest        # the proxy's model name
+```
+
 ## Inputs
 
 | Input | Default | Description |
@@ -70,6 +81,9 @@ jobs:
 | `anthropic-api-key` | — | Required unless `openai-api-key` is set. |
 | `openai-api-key` | — | Alternative to Anthropic; sets `MIGRATOWL_MODEL_PROVIDER=openai`. |
 | `model` | `claude-sonnet-5-5` | Passed to `MIGRATOWL_MODEL_NAME`. |
+| `model-provider` | `''` | `anthropic`, `openai` or `litellm`. Empty: `openai` when `openai-api-key` is set, otherwise `anthropic`. |
+| `llm-base-url` | `''` | Custom LLM endpoint (proxy or LiteLLM), sent as `ANTHROPIC_BASE_URL`, `OPENAI_BASE_URL` or `LITELLM_BASE_URL` for the chosen provider. |
+| `model-alias` | `''` | Model name sent to the provider when a proxy uses different naming (`MIGRATOWL_MODEL_ALIAS`). |
 | `mode` | `normal` | `safe` \| `normal`. |
 | `ecosystems` | `""` | Comma-separated; empty = auto-detect all. |
 | `exclude-deps` | `""` | Comma-separated package names to skip. |

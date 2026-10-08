@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **LLM proxy inputs** — `model-provider` (`anthropic` | `openai` | `litellm`; empty keeps the old automatic
+  choice), `llm-base-url` (routed to `ANTHROPIC_BASE_URL`, `OPENAI_BASE_URL` or `LITELLM_BASE_URL`) and
+  `model-alias` (`MIGRATOWL_MODEL_ALIAS`), matching the Migratowl server's proxy support. Same inputs and
+  defaults as the GitLab component.
+
 ### Changed
 
 - **Default `model` is now `claude-sonnet-5-5`** (was `claude-sonnet-5`; same price). Matches the new

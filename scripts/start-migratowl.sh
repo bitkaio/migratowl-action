@@ -34,12 +34,9 @@ fi
 log "Installing dependencies"
 uv sync --frozen --directory "$MIGRATOWL_DIR"
 
-# ── Determine model provider from supplied keys ───────────────────────────────
-if [ -n "${OPENAI_API_KEY:-}" ]; then
-  export MIGRATOWL_MODEL_PROVIDER=openai
-else
-  export MIGRATOWL_MODEL_PROVIDER=anthropic
-fi
+# ── Model provider, proxy base URL and alias (model-provider / llm-base-url / model-alias) ──
+# shellcheck source=scripts/resolve-llm-env.sh
+. "$(dirname "$0")/resolve-llm-env.sh"
 
 # ── Start server in background ────────────────────────────────────────────────
 log "Starting Migratowl server"
@@ -52,6 +49,10 @@ env \
   MIGRATOWL_CONFIDENCE_THRESHOLD="${MIGRATOWL_CONFIDENCE_THRESHOLD:-0.7}" \
   ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}" \
   OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
+  ANTHROPIC_BASE_URL="${ANTHROPIC_BASE_URL:-}" \
+  OPENAI_BASE_URL="${OPENAI_BASE_URL:-}" \
+  LITELLM_BASE_URL="${LITELLM_BASE_URL:-}" \
+  MIGRATOWL_MODEL_ALIAS="${MIGRATOWL_MODEL_ALIAS:-}" \
   GITHUB_TOKEN="${GITHUB_TOKEN:-}" \
   uv run --directory "$MIGRATOWL_DIR" \
     uvicorn migratowl.api.main:app \

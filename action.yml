@@ -8,71 +8,63 @@ branding:
 inputs:
   anthropic-api-key:
     description: 'Anthropic API key. Required unless openai-api-key is set.'
-    required: false
     default: ''
   openai-api-key:
     description: 'OpenAI API key. Alternative to anthropic-api-key; sets MIGRATOWL_MODEL_PROVIDER=openai.'
-    required: false
+    default: ''
+  model-provider:
+    description: 'LLM provider: anthropic | openai | litellm. Empty = openai when openai-api-key is set, else anthropic.'
+    default: ''
+  llm-base-url:
+    description: 'Custom LLM endpoint (corporate proxy, LiteLLM). Sent as ANTHROPIC_BASE_URL, OPENAI_BASE_URL or LITELLM_BASE_URL depending on the provider.'
+    default: ''
+  model-alias:
+    description: 'Model name to send to the provider when a proxy expects different naming (MIGRATOWL_MODEL_ALIAS).'
     default: ''
   model:
     description: 'Model name passed to MIGRATOWL_MODEL_NAME.'
-    required: false
     default: 'claude-sonnet-5-5'
   mode:
     description: 'Version resolution mode: safe | normal.'
-    required: false
     default: 'normal'
   ecosystems:
     description: 'Comma-separated list of ecosystems to scan (python, nodejs, go, rust, java). Empty = auto-detect all.'
-    required: false
     default: ''
   exclude-deps:
     description: 'Comma-separated package names to skip entirely.'
-    required: false
     default: ''
   check-deps:
     description: 'Override to force specific deps (auto-populated from PR context on bot PRs).'
-    required: false
     default: ''
   max-deps:
     description: 'Hard cap on outdated dependencies to analyze.'
-    required: false
     default: '50'
   include-prerelease:
     description: 'Consider pre-release versions when finding the latest version.'
-    required: false
     default: 'false'
   confidence-threshold:
     description: 'Attribution confidence threshold passed to MIGRATOWL_CONFIDENCE_THRESHOLD.'
-    required: false
     default: '0.7'
   migratowl-version:
     description: 'Runtime image tag and server version to use. Defaults to latest.'
-    required: false
     default: 'latest'
   scan-trigger:
     description: 'Controls which PRs trigger a scan: bot (default) | deps-changed | always. Ignored on schedule triggers.'
-    required: false
     default: 'bot'
   results-destination:
     description: 'Where to write results: pr-comment (default) | issue | artifact. On schedule triggers pr-comment is invalid.'
-    required: false
     default: 'pr-comment'
   fail-on-breaking:
     description: 'Exit non-zero when is_breaking: true is found, making Migratowl a blocking check.'
-    required: false
     default: 'false'
   initial-wait:
     description: 'Seconds to wait before the first poll (lets the sandbox spin up). Default: 600.'
-    required: false
     default: '600'
   poll-interval:
     description: 'Seconds between job status polls. Default: 30.'
-    required: false
     default: '30'
   scan-timeout:
     description: 'Total seconds before giving up on a scan. Default: 3600.'
-    required: false
     default: '3600'
 
 runs:
@@ -120,6 +112,9 @@ runs:
         ANTHROPIC_API_KEY: ${{ inputs.anthropic-api-key }}
         OPENAI_API_KEY: ${{ inputs.openai-api-key }}
         MIGRATOWL_MODEL_NAME: ${{ inputs.model }}
+        MODEL_PROVIDER_INPUT: ${{ inputs.model-provider }}
+        LLM_BASE_URL: ${{ inputs.llm-base-url }}
+        MODEL_ALIAS: ${{ inputs.model-alias }}
         MIGRATOWL_CONFIDENCE_THRESHOLD: ${{ inputs.confidence-threshold }}
         GITHUB_TOKEN: ${{ github.token }}
       run: ${{ github.action_path }}/scripts/start-migratowl.sh
