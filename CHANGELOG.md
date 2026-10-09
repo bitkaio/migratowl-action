@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-09
+
+Use with Migratowl 0.7.0 or later (`migratowl-version: latest` already resolves to it).
+
 ### Added
 
 - **LLM proxy inputs** — `model-provider` (`anthropic` | `openai` | `litellm`; empty keeps the old automatic
@@ -43,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Marketplace release. GitHub Composite Action that spins up an ephemeral kind cluster with Calico CNI,
 runs Migratowl in raw sandbox mode, and posts results as a PR comment, issue, or artifact.
 
-[Unreleased]: https://github.com/bitkaio/migratowl-action/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/bitkaio/migratowl-action/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/bitkaio/migratowl-action/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/bitkaio/migratowl-action/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/bitkaio/migratowl-action/releases/tag/v1.1.0
