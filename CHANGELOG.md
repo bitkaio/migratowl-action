@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-10
+
 ### Added
 
 - **Scan diagnostics kept as an artifact** — every scan keeps the scan result and the Migratowl server log as the
@@ -60,7 +62,8 @@ Use with Migratowl 0.7.0 or later (`migratowl-version: latest` already resolves 
 Marketplace release. GitHub Composite Action that spins up an ephemeral kind cluster with Calico CNI,
 runs Migratowl in raw sandbox mode, and posts results as a PR comment, issue, or artifact.
 
-[Unreleased]: https://github.com/bitkaio/migratowl-action/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/bitkaio/migratowl-action/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/bitkaio/migratowl-action/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/bitkaio/migratowl-action/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/bitkaio/migratowl-action/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/bitkaio/migratowl-action/releases/tag/v1.1.0
