@@ -120,6 +120,7 @@ Use only the permissions your workflow needs. For scheduled mode with `results-d
 5. **Extract dependencies** — on Dependabot and Renovate PRs, auto-extracts bumped package names for a targeted scan (10–50× cheaper than a full scan). For Renovate grouped updates, parses the PR body table; falls back to a full scan if the table is absent.
 6. **Trigger scan** — `POST /webhook`, waits `initial-wait` seconds (default 600s) to let the sandbox spin up, then polls `/jobs/{id}` every `poll-interval` seconds (default 30s) up to `scan-timeout` seconds (default 3600s).
 7. **Route results** — posts a PR comment (via Migratowl's built-in GitHub integration), updates/creates a tracked issue, or emits a workflow artifact depending on `results-destination`.
+8. **Keep diagnostics** — every scan, successful or not, keeps the scan result (`migratowl-result.json`) and the Migratowl server log (`migratowl.log`) as the `migratowl-scan-<job>` workflow artifact for 30 days. Packages the server flags for review (a "safe" verdict that the code evidence contradicts) show as 🔍 Review in the issue summary.
 
 ## Advanced configuration
 

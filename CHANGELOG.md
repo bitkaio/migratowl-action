@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Scan diagnostics kept as an artifact** — every scan keeps the scan result and the Migratowl server log as the
+  `migratowl-scan-<job>` workflow artifact (30 days), also when the scan fails, so a run can be diagnosed later.
+  Same as the GitLab component.
+- **🔍 Review in the issue summary** — packages the server flags for review (`reviews` in the result, Migratowl
+  0.8 and later) are shown as such instead of as safe.
+
+### Fixed
+
+- **`results-destination: artifact` uploaded nothing** — the result was only copied into the workspace while the log
+  said it was uploaded. The new artifact step covers it.
+
 ## [1.3.0] - 2026-10-09
 
 Use with Migratowl 0.7.0 or later (`migratowl-version: latest` already resolves to it).

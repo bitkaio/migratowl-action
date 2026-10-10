@@ -157,12 +157,18 @@ lines = [
     "",
 ]
 
+reviews = result.get("reviews") or {}
 if reports:
-    lines += ["| Dependency | Breaking | Summary |", "|---|---|---|"]
+    lines += ["| Dependency | Status | Summary |", "|---|---|---|"]
     for r in reports:
-        breaking = "⚠️ Yes" if r.get("is_breaking") else "✅ No"
-        summary = r.get("error_summary", "").replace("|", "\\|")[:120]
-        lines.append(f"| {r['dependency_name']} | {breaking} | {summary} |")
+        name = r["dependency_name"]
+        if r.get("is_breaking"):
+            status, summary = "⚠️ Breaking", r.get("error_summary", "")
+        elif name in reviews:
+            status, summary = "🔍 Review", reviews[name]
+        else:
+            status, summary = "✅ Safe", r.get("error_summary", "")
+        lines.append(f"| {name} | {status} | {summary.replace('|', chr(92) + '|')[:160]} |")
 else:
     lines.append("No breaking changes detected.")
 
@@ -192,7 +198,7 @@ PYEOF
     ;;
 
   artifact)
-    log "Results written to /tmp/migratowl-result.json (uploaded as workflow artifact)"
+    log "Results written to /tmp/migratowl-result.json (kept as the migratowl-scan-* workflow artifact)"
     ;;
 
   *)

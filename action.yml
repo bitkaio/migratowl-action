@@ -143,3 +143,17 @@ runs:
         GITHUB_REPO: ${{ github.repository }}
         GH_TOKEN: ${{ github.token }}
       run: ${{ github.action_path }}/scripts/trigger-scan.sh
+
+    # Always keep the scan result and the Migratowl server log, also when the scan fails, so a run can be
+    # diagnosed afterwards (e.g. where the model's tokens went).
+    - name: Keep scan result and server log
+      if: always() && env.MIGRATOWL_SKIP != 'true'
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+      with:
+        name: migratowl-scan-${{ github.job }}
+        path: |
+          /tmp/migratowl-result.json
+          /tmp/migratowl.log
+        if-no-files-found: ignore
+        retention-days: 30
+        overwrite: true
