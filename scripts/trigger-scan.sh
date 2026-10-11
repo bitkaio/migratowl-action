@@ -153,9 +153,12 @@ lines = [
     f"**Repository:** {result.get('repo_url', 'N/A')}  ",
     f"**Branch:** {result.get('branch_name', 'N/A')}  ",
     f"**Outdated dependencies found:** {len(scan.get('outdated', []))}  ",
-    f"**Analyzed:** {len(reports)}",
-    "",
+    f"**Analyzed:** {len(reports)}  ",
 ]
+skipped = result.get("skipped") or []
+if skipped:
+    lines.append(f"**Skipped (not analyzed):** {len(skipped)}: {', '.join(skipped)}")
+lines.append("")
 
 reviews = result.get("reviews") or {}
 if reports:
@@ -169,6 +172,8 @@ if reports:
         else:
             status, summary = "✅ Safe", r.get("error_summary", "")
         lines.append(f"| {name} | {status} | {summary.replace('|', chr(92) + '|')[:160]} |")
+elif skipped:
+    lines.append("No package was analyzed, so nothing is confirmed safe.")
 else:
     lines.append("No breaking changes detected.")
 
