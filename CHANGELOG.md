@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Sandbox role kept in sync with Migratowl** — the raw-mode Role now grants `get` as well as `create` on
+  `pods/exec`, which the Kubernetes Python client needs to open exec streams. The Action's server uses kind's admin
+  kubeconfig, so runs were not affected; the Role matches `k8s/rbac-raw.yaml` again.
 - **The server installed Migratowl's development tools** — `uv sync` and `uv run` included the dev group (test,
   fuzzing and lint tools) on every run. The server now installs without it, as the GitLab component does.
 - **The issue summary said "No breaking changes detected." when nothing was analyzed** — a scan that skipped
