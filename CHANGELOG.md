@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **`initial-wait` defaults to 30 seconds** (was 600) — the first poll came 10 minutes after submission even when
+  the scan had finished in 3; the 30-second poll interval already covers sandbox start-up.
+
 ### Fixed
 
 - **Sandbox role kept in sync with Migratowl** — the raw-mode Role now grants `get` as well as `create` on

@@ -95,7 +95,7 @@ jobs:
 | `scan-trigger` | `bot` | `bot` \| `deps-changed` \| `always`. Controls which PRs trigger a scan. Ignored on `schedule` triggers. |
 | `results-destination` | `pr-comment` | `pr-comment` \| `issue` \| `artifact`. On `schedule` triggers `pr-comment` is invalid. |
 | `fail-on-breaking` | `false` | Exit non-zero when `is_breaking: true` is found. Keep `false` until confidence scoring is validated. |
-| `initial-wait` | `600` | Seconds to wait before the first poll. Covers sandbox spin-up so early polls aren't wasted. |
+| `initial-wait` | `30` | Seconds to wait before the first poll. |
 | `poll-interval` | `30` | Seconds between job-status polls. |
 | `scan-timeout` | `3600` | Total seconds before giving up on a scan (deadline-based, not a fixed poll count). |
 
@@ -118,7 +118,7 @@ Use only the permissions your workflow needs. For scheduled mode with `results-d
 3. **Pull runtime image** — pulls `ghcr.io/bitkaio/migratowl-runtime:<version>` (prebuilt multi-arch image containing Python, Node.js, Go, Rust, and Java runtimes) and loads it into the cluster.
 4. **Start Migratowl server** — clones `bitkaio/migratowl` at the pinned version, installs via `uv sync`, starts `uvicorn` on `127.0.0.1:8000`.
 5. **Extract dependencies** — on Dependabot and Renovate PRs, auto-extracts bumped package names for a targeted scan (10–50× cheaper than a full scan). For Renovate grouped updates, parses the PR body table; falls back to a full scan if the table is absent.
-6. **Trigger scan** — `POST /webhook`, waits `initial-wait` seconds (default 600s) to let the sandbox spin up, then polls `/jobs/{id}` every `poll-interval` seconds (default 30s) up to `scan-timeout` seconds (default 3600s).
+6. **Trigger scan** — `POST /webhook`, waits `initial-wait` seconds (default 30s), then polls `/jobs/{id}` every `poll-interval` seconds (default 30s) up to `scan-timeout` seconds (default 3600s).
 7. **Route results** — posts a PR comment (via Migratowl's built-in GitHub integration), updates/creates a tracked issue, or emits a workflow artifact depending on `results-destination`.
 8. **Keep diagnostics** — every scan, successful or not, keeps the scan result (`migratowl-result.json`) and the Migratowl server log (`migratowl.log`) as the `migratowl-scan-<job>` workflow artifact for 30 days. Packages the server flags for review (a "safe" verdict that the code evidence contradicts) show as 🔍 Review in the issue summary.
 

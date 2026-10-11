@@ -58,8 +58,8 @@ inputs:
     description: 'Exit non-zero when is_breaking: true is found, making Migratowl a blocking check.'
     default: 'false'
   initial-wait:
-    description: 'Seconds to wait before the first poll (lets the sandbox spin up). Default: 600.'
-    default: '600'
+    description: 'Seconds to wait before the first poll. Default: 30.'
+    default: '30'
   poll-interval:
     description: 'Seconds between job status polls. Default: 30.'
     default: '30'
