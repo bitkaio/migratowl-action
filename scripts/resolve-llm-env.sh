@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Sourced by start-migratowl.sh: maps the model-provider, llm-base-url and
 # model-alias inputs onto the environment variables the Migratowl server reads.
-# Keep in sync with templates/scan.yml in bitkaio/migratowl-gitlab-component.
+# Keep in sync with templates/scan.yml in bitkaio/migratowl/migratowl-gitlab-component.
 
 PROVIDER="${MODEL_PROVIDER_INPUT:-}"
 if [ -z "$PROVIDER" ]; then
