@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **A breaking upgrade no longer fails the commit status unless `fail-on-breaking` is on** — the scan now passes
+  `fail-on-breaking` to Migratowl (0.8.2 or later), which otherwise sets the final status to success with the
+  breaking count in its description. On GitLab a failed status had failed the whole MR pipeline.
 - **`initial-wait` defaults to 30 seconds** (was 600) — the first poll came 10 minutes after submission even when
   the scan had finished in 3; the 30-second poll interval already covers sandbox start-up.
 

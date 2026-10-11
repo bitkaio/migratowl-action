@@ -69,12 +69,14 @@ PAYLOAD=$(jq -n \
   --argjson include_prerelease "$([ "$INCLUDE_PRERELEASE" = "true" ] && echo true || echo false)" \
   --argjson exclude_deps     "$EXCLUDE_DEPS_JSON" \
   --argjson ecosystems       "$ECOSYSTEMS_JSON" \
+  --argjson fail_on_breaking "$([ "$FAIL_ON_BREAKING" = "true" ] && echo true || echo false)" \
   '{
     repo_url:          $repo_url,
     branch_name:       $branch_name,
     git_provider:      "github",
     pr_number:         $pr_number,
     commit_sha:        $commit_sha,
+    fail_on_breaking:  $fail_on_breaking,
     check_deps:        $check_deps,
     max_deps:          $max_deps,
     mode:              $mode,
