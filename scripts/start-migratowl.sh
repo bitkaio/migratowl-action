@@ -32,7 +32,7 @@ fi
 
 # ── Install dependencies ──────────────────────────────────────────────────────
 log "Installing dependencies"
-uv sync --frozen --directory "$MIGRATOWL_DIR"
+uv sync --frozen --no-dev --directory "$MIGRATOWL_DIR"
 
 # ── Model provider, proxy base URL and alias (model-provider / llm-base-url / model-alias) ──
 # shellcheck source=scripts/resolve-llm-env.sh
@@ -54,7 +54,7 @@ env \
   LITELLM_BASE_URL="${LITELLM_BASE_URL:-}" \
   MIGRATOWL_MODEL_ALIAS="${MIGRATOWL_MODEL_ALIAS:-}" \
   GITHUB_TOKEN="${GITHUB_TOKEN:-}" \
-  uv run --directory "$MIGRATOWL_DIR" \
+  uv run --no-dev --directory "$MIGRATOWL_DIR" \
     uvicorn migratowl.api.main:app \
     --host 127.0.0.1 --port 8000 \
     > /tmp/migratowl.log 2>&1 &

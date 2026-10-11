@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The server installed Migratowl's development tools** — `uv sync` and `uv run` included the dev group (test,
+  fuzzing and lint tools) on every run. The server now installs without it, as the GitLab component does.
 - **The issue summary said "No breaking changes detected." when nothing was analyzed** — a scan that skipped
   every package (call budget, `max-deps`) read as all clear. The summary now lists skipped packages and says
   that nothing is confirmed safe when no package was analyzed.
