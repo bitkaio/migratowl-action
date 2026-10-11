@@ -55,7 +55,7 @@ inputs:
     description: 'Where to write results: pr-comment (default) | issue | artifact. On schedule triggers pr-comment is invalid.'
     default: 'pr-comment'
   fail-on-breaking:
-    description: 'Exit non-zero when is_breaking: true is found, making Migratowl a blocking check.'
+    description: 'When a breaking upgrade is found, fail the step and set a failed commit status (Migratowl 0.8.2+). When false, the status stays successful and names the breaking count.'
     default: 'false'
   initial-wait:
     description: 'Seconds to wait before the first poll. Default: 30.'

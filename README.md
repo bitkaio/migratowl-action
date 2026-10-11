@@ -94,7 +94,7 @@ jobs:
 | `migratowl-version` | `latest` | Pins the runtime image and server version. |
 | `scan-trigger` | `bot` | `bot` \| `deps-changed` \| `always`. Controls which PRs trigger a scan. Ignored on `schedule` triggers. |
 | `results-destination` | `pr-comment` | `pr-comment` \| `issue` \| `artifact`. On `schedule` triggers `pr-comment` is invalid. |
-| `fail-on-breaking` | `false` | Exit non-zero when `is_breaking: true` is found. Keep `false` until confidence scoring is validated. |
+| `fail-on-breaking` | `false` | When a breaking upgrade is found, fail the step and set a failed commit status (Migratowl 0.8.2+). When `false`, the status stays successful and its description names the breaking count. |
 | `initial-wait` | `30` | Seconds to wait before the first poll. |
 | `poll-interval` | `30` | Seconds between job-status polls. |
 | `scan-timeout` | `3600` | Total seconds before giving up on a scan (deadline-based, not a fixed poll count). |
