@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Targeted scans of Dependabot and Renovate PRs no longer fail before they start** — the extracted package list
+  was written to `$GITHUB_ENV` as multi-line JSON, which the runner rejects (`Invalid format '  "mongoose"'`).
+  The list is now written on one line. Renovate PRs without a parseable package table had the same failure,
+  because the "running full scan" notice was captured into the value; the notice is now printed on its own.
+
 ## [1.5.0] - 2026-10-11
 
 ### Changed
