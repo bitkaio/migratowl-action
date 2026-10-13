@@ -117,7 +117,7 @@ PYEOF
   fi
 
   # 3. Grouped update — couldn't parse specific packages; signal full scan.
-  echo "::notice::Renovate grouped PR detected — dep table not found or unparseable, running full scan"
+  #    Only the JSON goes to stdout: the caller captures it into $GITHUB_ENV.
   echo "[]"
 }
 
@@ -194,11 +194,16 @@ if is_bot_pr; then
       ;;
     "renovate[bot]")
       CHECK_DEPS=$(extract_renovate_deps)
+      if [ "$CHECK_DEPS" = "[]" ]; then
+        echo "::notice::Renovate grouped PR detected — dep table not found or unparseable, running full scan"
+      fi
       ;;
     *)
       CHECK_DEPS="[]"
       ;;
   esac
+  # $GITHUB_ENV takes one KEY=value per line; jq prints arrays over several lines.
+  CHECK_DEPS=$(printf '%s' "$CHECK_DEPS" | jq -c .)
   log "Auto-extracted check_deps: ${CHECK_DEPS}"
   echo "MIGRATOWL_CHECK_DEPS=${CHECK_DEPS}" >> "$GITHUB_ENV"
 else
