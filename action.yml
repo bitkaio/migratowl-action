@@ -42,6 +42,9 @@ inputs:
   include-prerelease:
     description: 'Consider pre-release versions when finding the latest version.'
     default: 'false'
+  target-versions:
+    description: 'JSON object of package name to the version to upgrade to instead of the newest one, e.g. {"pydantic": "2.5.0"} (Migratowl 0.9.0+). Empty = newest versions.'
+    default: '{}'
   confidence-threshold:
     description: 'Attribution confidence threshold passed to MIGRATOWL_CONFIDENCE_THRESHOLD.'
     default: '0.7'
@@ -132,6 +135,7 @@ runs:
         MAX_DEPS: ${{ inputs.max-deps }}
         MODE: ${{ inputs.mode }}
         INCLUDE_PRERELEASE: ${{ inputs.include-prerelease }}
+        TARGET_VERSIONS: ${{ inputs.target-versions }}
         EXCLUDE_DEPS: ${{ inputs.exclude-deps }}
         ECOSYSTEMS: ${{ inputs.ecosystems }}
         RESULTS_DESTINATION: ${{ inputs.results-destination }}

@@ -12,6 +12,7 @@ COMMIT_SHA_PUSH="${COMMIT_SHA_PUSH:-}"
 MAX_DEPS="${MAX_DEPS:-50}"
 MODE="${MODE:-normal}"
 INCLUDE_PRERELEASE="${INCLUDE_PRERELEASE:-false}"
+TARGET_VERSIONS="${TARGET_VERSIONS:-}"
 EXCLUDE_DEPS="${EXCLUDE_DEPS:-}"
 ECOSYSTEMS="${ECOSYSTEMS:-}"
 RESULTS_DESTINATION="${RESULTS_DESTINATION:-pr-comment}"
@@ -44,6 +45,16 @@ else
     "import sys,json; s=sys.stdin.read().strip(); print(json.dumps([x.strip() for x in s.split(',') if x.strip()]))")
 fi
 
+# target-versions: a JSON object (package -> version); sent only when it has entries,
+# so servers older than 0.9.0 get the same payload as before.
+if [ -z "$TARGET_VERSIONS" ]; then
+  TARGET_VERSIONS="{}"
+fi
+if ! TARGET_VERSIONS_JSON=$(printf '%s' "$TARGET_VERSIONS" | jq -ce 'if type == "object" then . else error("not an object") end' 2>/dev/null); then
+  echo "::error::target-versions must be a JSON object such as {\"pydantic\": \"2.5.0\"}, got: ${TARGET_VERSIONS}"
+  exit 1
+fi
+
 # Resolve pr_number: must be an integer or null.
 if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ] || [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
   PR_NUMBER_JSON="null"
@@ -70,6 +81,7 @@ PAYLOAD=$(jq -n \
   --argjson exclude_deps     "$EXCLUDE_DEPS_JSON" \
   --argjson ecosystems       "$ECOSYSTEMS_JSON" \
   --argjson fail_on_breaking "$([ "$FAIL_ON_BREAKING" = "true" ] && echo true || echo false)" \
+  --argjson target_versions  "$TARGET_VERSIONS_JSON" \
   '{
     repo_url:          $repo_url,
     branch_name:       $branch_name,
@@ -83,7 +95,7 @@ PAYLOAD=$(jq -n \
     include_prerelease: $include_prerelease,
     exclude_deps:      $exclude_deps,
     ecosystems:        $ecosystems
-  }')
+  } + (if $target_versions == {} then {} else {target_versions: $target_versions} end)')
 
 log "Payload: $(echo "$PAYLOAD" | jq -c .)"
 

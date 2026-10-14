@@ -90,6 +90,7 @@ jobs:
 | `check-deps` | auto | On Dependabot/Renovate PRs, auto-populated. Override to force specific deps. |
 | `max-deps` | `50` | Hard cap on outdated deps to analyze. |
 | `include-prerelease` | `false` | Consider pre-release versions. |
+| `target-versions` | `{}` | JSON object of package name → version to upgrade to instead of the newest one, e.g. `{"pydantic": "2.5.0"}` (Migratowl 0.9.0+). Does not limit the scan to these packages; set `check-deps` too for that. |
 | `confidence-threshold` | `0.7` | Passed to `MIGRATOWL_CONFIDENCE_THRESHOLD`. |
 | `migratowl-version` | `latest` | Pins the runtime image and server version. |
 | `scan-trigger` | `bot` | `bot` \| `deps-changed` \| `always`. Controls which PRs trigger a scan. Ignored on `schedule` triggers. |
