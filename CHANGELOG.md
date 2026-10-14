@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`target-versions` input** — a JSON object of package name to the version to upgrade to, instead of the newest
+  one (`{"pydantic": "2.5.0"}`), sent as the server's `target_versions` field (Migratowl 0.9.0+). It is only sent
+  when it has entries, so older servers get the same payload as before. A value that is not a JSON object fails the
+  step before the scan starts.
+
 ## [1.5.1] - 2026-10-13
 
 ### Fixed
