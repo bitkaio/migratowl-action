@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-10-23
+
 ### Fixed
 
 - **`scan-trigger: deps-changed` no longer fails on human-authored PRs** — the script stopped before it wrote
