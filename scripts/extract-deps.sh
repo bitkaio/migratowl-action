@@ -150,10 +150,9 @@ case "$SCAN_TRIGGER" in
         echo "MIGRATOWL_SKIP=true" >> "$GITHUB_ENV"
         exit 0
       fi
-      log "scan-trigger: deps-changed — dep manifest changed, running full scan"
-      echo "MIGRATOWL_SKIP=false"    >> "$GITHUB_ENV"
-      echo "MIGRATOWL_CHECK_DEPS=[]" >> "$GITHUB_ENV"
-      exit 0
+      # Fall through to the common tail: it sets the branch (PR head), honours check-deps and
+      # defaults to a full scan for a human-authored PR.
+      log "scan-trigger: deps-changed — dep manifest changed, scanning the PR head"
     fi
     ;;
   always)

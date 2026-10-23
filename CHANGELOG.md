@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`scan-trigger: deps-changed` no longer fails on human-authored PRs** — the script stopped before it wrote
+  `MIGRATOWL_BRANCH`, so the scan was sent with an empty `branch_name` and failed with "Remote branch  not found"
+  in the clone step. It also ignored the `check-deps` input on that path. The branch is now the PR head, as for
+  `scan-trigger: always`, and `check-deps` applies. (`tests/test-extract-deps.sh` covers it.)
+
 ## [1.6.0] - 2026-10-14
 
 ### Added
